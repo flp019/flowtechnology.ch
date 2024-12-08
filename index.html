@@ -1,4 +1,5 @@
 <html><head><base href="https://flowtechnology.example.com">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <style>
 :root {
   --primary-green: #0EAD69;
@@ -41,6 +42,10 @@ header {
 .logo img {
   height: 40px;
   width: auto;
+}
+
+.nav-toggle {
+  display: none;
 }
 
 nav ul {
@@ -410,34 +415,124 @@ nav a:hover {
 .modal-details li p {
   font-size: 0.9em;
   margin: 5px 0 15px 0;
-  opacity: 0.8;
 }
 
-/* Improve mobile responsiveness */
+/* Mobile-specific styles */
 @media (max-width: 768px) {
-  .modal-details li p {
-    font-size: 0.85em;
+  header {
+    padding: 0.5rem;
   }
-  
+
+  .logo img {
+    height: 30px;
+  }
+
+  .nav-toggle {
+    display: block;
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    width: 30px;
+    height: 22px;
+    cursor: pointer;
+    z-index: 1001;
+  }
+
+  .nav-toggle span {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background: var(--text-color);
+    position: absolute;
+    transition: 0.3s;
+  }
+
+  .nav-toggle span:nth-child(1) { top: 0; }
+  .nav-toggle span:nth-child(2) { top: 10px; }
+  .nav-toggle span:nth-child(3) { top: 20px; }
+
+  nav ul {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 80%;
+    height: 100vh;
+    background: var(--dark-bg);
+    flex-direction: column;
+    padding: 80px 20px;
+    transition: 0.3s;
+  }
+
+  nav ul.active {
+    right: 0;
+    display: flex;
+  }
+
+  nav ul li {
+    margin: 1rem 0;
+  }
+
+  .hero h1 {
+    font-size: 2rem;
+    padding: 0 1rem;
+  }
+
+  .hero p {
+    font-size: 1.1rem;
+    padding: 0 1rem;
+  }
+
+  .services {
+    padding: 3rem 1rem;
+  }
+
+  .services-grid {
+    grid-template-columns: 1fr;
+  }
+
   .service-card {
     padding: 1.5rem;
   }
-  
+
+  .features {
+    padding: 3rem 1rem;
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .qr-generator {
+    margin: 1rem;
+    padding: 1rem;
+  }
+
+  .contact-form {
+    margin: 2rem 1rem;
+    padding: 1rem;
+  }
+
   .modal-content {
-    padding: 15px;
-    margin: 10% auto;
+    margin: 5% 1rem;
+    padding: 1rem;
+    max-height: 90vh;
+  }
+
+  .modal-details h3 {
+    font-size: 1.2rem;
+  }
+
+  .modal-details p {
+    font-size: 0.9rem;
+  }
+
+  .btn {
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
   }
 }
 
-@media (max-width: 768px) {
-  .hero h1 {
-    font-size: 2.5rem;
-  }
-  
-  nav ul {
-    display: none;
-  }
-}
 </style>
 </head>
 <body>
@@ -445,6 +540,11 @@ nav a:hover {
 <header>
   <div class="logo">
     <img src="/Flow Technology(10)(1).png" alt="Flow Technology Logo">
+  </div>
+  <div class="nav-toggle">
+    <span></span>
+    <span></span>
+    <span></span>
   </div>
   <nav>
     <ul>
@@ -591,6 +691,7 @@ nav a:hover {
         <option value="web">Création Web</option>
         <option value="google">Présence Google</option>
         <option value="lora">Solution LORA</option>
+        <option value="flowbot">FLOWBOT</option> <!-- Added FLOWBOT option -->
       </select>
     </div>
     
@@ -829,6 +930,75 @@ document.querySelectorAll('.service-card, .feature-card').forEach(card => {
   card.style.transition = 'all 0.6s ease-out';
   observer.observe(card);
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+  // Create and add hamburger menu button
+  const header = document.querySelector('header');
+  const navToggle = document.createElement('div');
+  navToggle.className = 'nav-toggle';
+  navToggle.innerHTML = '<span></span><span></span><span></span>';
+  header.appendChild(navToggle);
+
+  const nav = document.querySelector('nav ul');
+  navToggle.addEventListener('click', function() {
+    nav.classList.toggle('active');
+    // Animate hamburger to X
+    this.classList.toggle('active');
+  });
+
+  // Close menu when clicking a link
+  document.querySelectorAll('nav a').forEach(link => {
+    link.addEventListener('click', () => {
+      nav.classList.remove('active');
+      navToggle.classList.remove('active');
+    });
+  });
+
+  // Close menu when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('nav') && !e.target.closest('.nav-toggle')) {
+      nav.classList.remove('active');
+      navToggle.classList.remove('active');
+    }
+  });
+});
+
+// Add touch event handling for mobile
+document.addEventListener('touchstart', handleTouchStart, false);
+document.addEventListener('touchmove', handleTouchMove, false);
+
+let xDown = null;
+let yDown = null;
+
+function handleTouchStart(evt) {
+  xDown = evt.touches[0].clientX;
+  yDown = evt.touches[0].clientY;
+}
+
+function handleTouchMove(evt) {
+  if (!xDown || !yDown) {
+    return;
+  }
+
+  const xUp = evt.touches[0].clientX;
+  const yUp = evt.touches[0].clientY;
+
+  const xDiff = xDown - xUp;
+  const yDiff = yDown - yUp;
+
+  if (Math.abs(xDiff) > Math.abs(yDiff)) {
+    if (xDiff > 0) {
+      // Swipe left
+      document.querySelector('nav ul').classList.remove('active');
+    } else {
+      // Swipe right
+      document.querySelector('nav ul').classList.add('active');
+    }
+  }
+
+  xDown = null;
+  yDown = null;
+}
 
 document.querySelector('a[href="#contact"]').addEventListener('click', (e) => {
   e.preventDefault();
