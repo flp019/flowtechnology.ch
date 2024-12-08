@@ -34,14 +34,25 @@ header {
 }
 
 .logo {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
+  font-size: 1.8rem;
+  font-weight: bold;
+  background: linear-gradient(45deg, #0EAD69, #2ecc71);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientFlow 3s ease infinite;
 }
 
-.logo img {
-  height: 40px;
-  width: auto;
+@keyframes gradientFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 .nav-toggle {
@@ -154,6 +165,15 @@ nav a:hover {
   padding: 2rem;
   position: relative;
   z-index: 1;
+}
+
+.hero-content p {
+  font-size: 1.5rem;
+  margin-bottom: 3rem; /* Increase margin below paragraph */
+}
+
+.hero-content .btn {
+  margin-top: 2rem; /* Add additional space above button */
 }
 
 .hero h1 {
@@ -306,10 +326,13 @@ nav a:hover {
 }
 
 #qrImage {
-  background: white;
-  padding: 1rem;
-  border-radius: 8px;
-  margin: 1rem 0;
+  display: block !important;
+  margin: 1rem auto;
+}
+
+#downloadBtn {
+  margin: 1rem auto;
+  display: block;
 }
 
 .contact-form {
@@ -353,30 +376,45 @@ nav a:hover {
   top: 0;
   width: 100%;
   height: 100%;
-  overflow: auto;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(5px);
 }
 
 .modal-content {
   background-color: var(--dark-bg);
   color: var(--text-color);
-  margin: 15% auto;
-  padding: 20px;
-  border: 1px solid var(--primary-green);
+  margin: 5% auto;
+  padding: 30px;
+  border: 2px solid var(--primary-green);
   width: 90%;
   max-width: 800px;
-  border-radius: 8px;
+  border-radius: 15px;
   position: relative;
-  max-height: 80vh;
+  max-height: 90vh;
   overflow-y: auto;
+  animation: modalSlideIn 0.3s ease-out;
+  box-shadow: 0 0 20px rgba(14, 173, 105, 0.2);
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .modal-details {
-  margin-top: 20px;
+  margin-top: 25px;
 }
 
 .modal-details h3 {
   color: var(--primary-green);
-  margin-bottom: 15px;
+  margin-bottom: 20px;
+  font-size: 1.4rem;
 }
 
 .modal-details ul {
@@ -385,151 +423,92 @@ nav a:hover {
 }
 
 .modal-details li {
-  margin-bottom: 10px;
-  padding-left: 20px;
+  margin-bottom: 15px;
+  padding-left: 25px;
   position: relative;
+  animation: listItemFadeIn 0.5s ease-out forwards;
+  opacity: 0;
+}
+
+.modal-details li:nth-child(1) { animation-delay: 0.1s; }
+.modal-details li:nth-child(2) { animation-delay: 0.2s; }
+.modal-details li:nth-child(3) { animation-delay: 0.3s; }
+.modal-details li:nth-child(4) { animation-delay: 0.4s; }
+.modal-details li:nth-child(5) { animation-delay: 0.5s; }
+
+@keyframes listItemFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .modal-details li:before {
-  content: "•";
+  content: "→";
   color: var(--primary-green);
   position: absolute;
   left: 0;
+  transition: transform 0.3s ease;
+}
+
+.modal-details li:hover:before {
+  transform: translateX(5px);
 }
 
 .close {
-  color: var(--text-color);
   position: absolute;
   right: 20px;
-  top: 10px;
+  top: 15px;
   font-size: 28px;
   font-weight: bold;
   cursor: pointer;
+  color: var(--text-color);
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.3s ease;
 }
 
 .close:hover {
   color: var(--primary-green);
+  transform: rotate(90deg);
 }
 
-/* Add styles for the new modal content */
-.modal-details li p {
-  font-size: 0.9em;
-  margin: 5px 0 15px 0;
-}
-
-/* Mobile-specific styles */
+/* Mobile-specific modal styles */
 @media (max-width: 768px) {
-  header {
-    padding: 0.5rem;
-  }
-
-  .logo img {
-    height: 30px;
-  }
-
-  .nav-toggle {
-    display: block;
-    position: absolute;
-    right: 1rem;
-    top: 1rem;
-    width: 30px;
-    height: 22px;
-    cursor: pointer;
-    z-index: 1001;
-  }
-
-  .nav-toggle span {
-    display: block;
-    width: 100%;
-    height: 2px;
-    background: var(--text-color);
-    position: absolute;
-    transition: 0.3s;
-  }
-
-  .nav-toggle span:nth-child(1) { top: 0; }
-  .nav-toggle span:nth-child(2) { top: 10px; }
-  .nav-toggle span:nth-child(3) { top: 20px; }
-
-  nav ul {
-    display: none;
-    position: fixed;
-    top: 0;
-    right: -100%;
-    width: 80%;
-    height: 100vh;
-    background: var(--dark-bg);
-    flex-direction: column;
-    padding: 80px 20px;
-    transition: 0.3s;
-  }
-
-  nav ul.active {
-    right: 0;
-    display: flex;
-  }
-
-  nav ul li {
-    margin: 1rem 0;
-  }
-
-  .hero h1 {
-    font-size: 2rem;
-    padding: 0 1rem;
-  }
-
-  .hero p {
-    font-size: 1.1rem;
-    padding: 0 1rem;
-  }
-
-  .services {
-    padding: 3rem 1rem;
-  }
-
-  .services-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .service-card {
-    padding: 1.5rem;
-  }
-
-  .features {
-    padding: 3rem 1rem;
-  }
-
-  .features-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .qr-generator {
-    margin: 1rem;
-    padding: 1rem;
-  }
-
-  .contact-form {
-    margin: 2rem 1rem;
-    padding: 1rem;
-  }
-
   .modal-content {
-    margin: 5% 1rem;
-    padding: 1rem;
-    max-height: 90vh;
+    margin: 0;
+    height: 100vh;
+    width: 100%;
+    border-radius: 0;
+    padding: 20px;
   }
 
   .modal-details h3 {
     font-size: 1.2rem;
   }
 
-  .modal-details p {
-    font-size: 0.9rem;
+  .modal-details li {
+    font-size: 0.95rem;
+    margin-bottom: 12px;
   }
 
-  .btn {
-    padding: 0.8rem 1.5rem;
-    font-size: 1rem;
+  .close {
+    right: 15px;
+    top: 15px;
+  }
+
+  .form-group select {
+    font-size: 16px;
+    padding: 12px;
+    height: 48px;
   }
 }
 
@@ -539,7 +518,7 @@ nav a:hover {
 
 <header>
   <div class="logo">
-    <img src="/Flow Technology(10)(1).png" alt="Flow Technology Logo">
+    Flow Technology
   </div>
   <div class="nav-toggle">
     <span></span>
@@ -609,7 +588,6 @@ nav a:hover {
       </ul>
     </div>
 
-    <!-- New service card for FLOWBOT -->
     <div class="service-card" onclick="openModal('flowbot')">
       <h2>FLOWBOT</h2>
       <p>Bot multifonctionnel pour la gestion numérique</p>
@@ -620,6 +598,28 @@ nav a:hover {
         <li>QR Code generator</li>
         <li>IP checker</li>
         <li>Password generator</li>
+      </ul>
+    </div>
+
+    <div class="service-card" onclick="openModal('pentester')">
+      <h2>Pentesting</h2>
+      <p>Services de sécurité et analyse des vulnérabilités</p>
+      <ul>
+        <li>Identification des failles</li>
+        <li>Tests d'intrusion</li>
+        <li>Analyse des versions</li>
+        <li>Recommandations sécurité</li>
+      </ul>
+    </div>
+
+    <div class="service-card" onclick="openModal('restaurant')">
+      <h2>Système de Commande en Ligne</h2>
+      <p>Solution complète pour restaurants</p>
+      <ul>
+        <li>Menu digital personnalisé</li>
+        <li>Sans frais mensuels</li>
+        <li>Paiements directs</li>
+        <li>Gestion des livraisons</li>
       </ul>
     </div>
   </div>
@@ -691,7 +691,9 @@ nav a:hover {
         <option value="web">Création Web</option>
         <option value="google">Présence Google</option>
         <option value="lora">Solution LORA</option>
-        <option value="flowbot">FLOWBOT</option> <!-- Added FLOWBOT option -->
+        <option value="flowbot">Flowbot</option>
+        <option value="pentester">Pentesting</option>
+        <option value="restaurant">Système de Commande</option>
       </select>
     </div>
     
@@ -710,6 +712,18 @@ nav a:hover {
     <div id="modalText"></div>
   </div>
 </div>
+
+<footer style="text-align: center; padding: 2rem; background: var(--dark-bg);">
+  <div style="margin-bottom: 1rem;">
+    <span style="display: inline-flex; align-items: center; gap: 0.5rem;">
+      <svg width="20" height="20" viewBox="0 0 24 24" style="animation: rotate 3s linear infinite;">
+        <path fill="var(--primary-green)" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+        <path fill="var(--primary-green)" d="M12 6c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6z"/>
+      </svg>
+      2025 Flow Technology Innovation et Expertise
+    </span>
+  </div>
+</footer>
 
 <script>
 document.querySelectorAll('.btn').forEach(btn => {
@@ -732,6 +746,17 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 function openModal(service) {
   const modal = document.getElementById('myModal');
   const modalText = document.getElementById('modalText');
+  
+  // Add animation class to modal
+  modal.style.display = "block";
+  document.body.style.overflow = 'hidden'; // Prevent background scrolling
+  
+  // Add fade in animation to modal content
+  modalText.style.opacity = '0';
+  setTimeout(() => {
+    modalText.style.opacity = '1';
+    modalText.style.transition = 'opacity 0.3s ease-out';
+  }, 100);
 
   switch(service) {
     case 'wifi':
@@ -830,14 +855,64 @@ function openModal(service) {
           <p>Restez connectés et préparez-vous pour une évolution encore plus impressionnante. FLOWBOT 2.0 arrive bientôt! 🚀</p>
         </div>`;
       break;
+    case 'pentester':
+      modalText.innerHTML = `
+        <h2>Services de Pentesting</h2>
+        <div class="modal-details">
+          <h3>Nos services comprennent:</h3>
+          <ul>
+            <li>Identification complète des vulnérabilités</li>
+            <li>Analyse approfondie des versions logicielles</li>
+            <li>Tests d'intrusion professionnels</li>
+            <li>Rapport détaillé et recommandations</li>
+            <li>Support pour la résolution des failles</li>
+          </ul>
+        </div>`;
+      break;
+    case 'restaurant':
+      modalText.innerHTML = `
+        <h2>Système de Commande en Ligne pour Restaurants</h2>
+        <div class="modal-details">
+          <h3>Avantages clés:</h3>
+          <ul>
+            <li>Solution sans frais mensuels ni commissions</li>
+            <li>Menu digital 100% personnalisé</li>
+            <li>Paiements directs sur votre compte</li>
+            <li>Gestion complète des commandes</li>
+            <li>Support technique continu</li>
+          </ul>
+          <p>Notre système vous permet de garder 100% de vos profits tout en offrant une expérience exceptionnelle à vos clients.</p>
+        </div>`;
+      break;
   }
-
-  modal.style.display = "block";
 }
 
 function closeModal() {
-  document.getElementById('myModal').style.display = "none";
+  const modal = document.getElementById('myModal');
+  const modalText = document.getElementById('modalText');
+  
+  // Add fade out animation
+  modalText.style.opacity = '0';
+  setTimeout(() => {
+    modal.style.display = "none";
+    document.body.style.overflow = ''; // Restore scrolling
+  }, 300);
 }
+
+// Close modal when clicking outside
+window.onclick = function(event) {
+  const modal = document.getElementById('myModal');
+  if (event.target == modal) {
+    closeModal();
+  }
+}
+
+// Add escape key support
+document.addEventListener('keydown', function(event) {
+  if (event.key === 'Escape') {
+    closeModal();
+  }
+});
 
 // QR Code functions
 function generateQR() {
